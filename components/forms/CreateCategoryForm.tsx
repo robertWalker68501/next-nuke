@@ -31,7 +31,10 @@ const CreateCategoryForm = () => {
 
     startTransition(async () => {
       try {
-        const result = await createCategory({ name, description });
+        const result = await createCategory({
+          name,
+          description,
+        });
 
         if (!result.success) {
           toast.add({

@@ -1,30 +1,21 @@
 'use server';
 
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
 import { createCategorySchema } from '@/lib/schemas/CategorySchema';
 import slugify from 'slugify';
 import prisma from '@/lib/prisma';
 import { Prisma } from '@/app/generated/prisma/client';
 import { revalidatePath } from 'next/cache';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 export const createCategory = async ({
   name,
   description,
 }: {
   name: string;
-  description: string;
+  description?: string;
 }) => {
   // Authentication / Authorization
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) throw new Error('Unauthorized');
-
-  if (session.user.role !== 'admin' && session.user.role !== 'owner') {
-    throw new Error('You are not authorized to use this operation');
-  }
+  await requireAdmin();
 
   // Validate submitted data
   const validatedFields = createCategorySchema.safeParse({
@@ -71,7 +62,7 @@ export const createCategory = async ({
     await prisma.category.create({
       data: {
         name: validatedName,
-        description: validatedDescription,
+        description: validatedDescription || null,
         slug,
         sortOrder,
       },

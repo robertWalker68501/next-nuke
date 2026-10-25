@@ -6,12 +6,14 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import {
   Item,
+  ItemActions,
   ItemContent,
   ItemDescription,
   ItemTitle,
 } from '@/components/ui/item';
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
+import DeleteCategoryButton from '@/components/categories/DeleteCategoryButton';
 
 const AuthorizedCategoriesList = async () => {
   const session = await auth.api.getSession({
@@ -52,6 +54,18 @@ const AuthorizedCategoriesList = async () => {
                 <ItemTitle>{category.name}</ItemTitle>
                 <ItemDescription>{category.description}</ItemDescription>
               </ItemContent>
+              <ItemActions>
+                <Link
+                  href={`/dashboard/categories/${category.id}/edit`}
+                  className={buttonVariants({})}
+                >
+                  Edit
+                </Link>
+                <DeleteCategoryButton
+                  categoryId={category.id}
+                  categoryName={category.name}
+                />
+              </ItemActions>
             </Item>
           ))}
         </div>

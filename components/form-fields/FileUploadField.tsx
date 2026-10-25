@@ -2,7 +2,15 @@
 
 import * as React from 'react';
 
-import { AudioLines, FileIcon, ImageIcon, Loader2, UploadCloud, Video, X } from 'lucide-react';
+import {
+  AudioLines,
+  FileIcon,
+  ImageIcon,
+  Loader2,
+  UploadCloud,
+  Video,
+  X,
+} from 'lucide-react';
 import {
   Controller,
   type Control,
@@ -125,7 +133,15 @@ function isImageFile(file: UploadedFileValue): boolean {
   return extension ? IMAGE_FILE_EXTENSIONS.has(extension) : false;
 }
 
-const AUDIO_FILE_EXTENSIONS = new Set(['aac', 'flac', 'm4a', 'mp3', 'ogg', 'wav', 'webm']);
+const AUDIO_FILE_EXTENSIONS = new Set([
+  'aac',
+  'flac',
+  'm4a',
+  'mp3',
+  'ogg',
+  'wav',
+  'webm',
+]);
 const VIDEO_FILE_EXTENSIONS = new Set(['m4v', 'mov', 'mp4', 'ogv', 'webm']);
 
 function fileExtension(file: UploadedFileValue): string {
@@ -135,13 +151,19 @@ function fileExtension(file: UploadedFileValue): string {
 function isAudioFile(file: UploadedFileValue): boolean {
   const type = file.type.toLowerCase();
   if (type.startsWith('audio/')) return true;
-  return AUDIO_FILE_EXTENSIONS.has(type) || AUDIO_FILE_EXTENSIONS.has(fileExtension(file));
+  return (
+    AUDIO_FILE_EXTENSIONS.has(type) ||
+    AUDIO_FILE_EXTENSIONS.has(fileExtension(file))
+  );
 }
 
 function isVideoFile(file: UploadedFileValue): boolean {
   const type = file.type.toLowerCase();
   if (type.startsWith('video/')) return true;
-  return VIDEO_FILE_EXTENSIONS.has(type) || VIDEO_FILE_EXTENSIONS.has(fileExtension(file));
+  return (
+    VIDEO_FILE_EXTENSIONS.has(type) ||
+    VIDEO_FILE_EXTENSIONS.has(fileExtension(file))
+  );
 }
 
 function normalizeUploadedFile(file: {
@@ -164,7 +186,10 @@ function normalizeUploadedFile(file: {
     name: file.name,
     url,
     size: file.size,
-    type: file.type?.toLowerCase() ?? file.name.split('.').pop()?.toLowerCase() ?? 'file',
+    type:
+      file.type?.toLowerCase() ??
+      file.name.split('.').pop()?.toLowerCase() ??
+      'file',
   };
 }
 
@@ -239,7 +264,7 @@ function UploadFieldBody({
   const uploadOptions = {
     uploadProgressGranularity: 'fine' as const,
     onClientUploadComplete: handleUploadComplete,
-    onUploadProgress: ({ progress: nextProgress }: { progress: number }) => {
+    onUploadProgress: (nextProgress: number) => {
       setProgress(nextProgress);
     },
     onUploadError: (error: Error) => {
@@ -302,10 +327,11 @@ function UploadFieldBody({
 
     if (
       mode === 'media' &&
-      files.some((file) =>
-        !file.type.startsWith('image/') &&
-        !file.type.startsWith('audio/') &&
-        !file.type.startsWith('video/'),
+      files.some(
+        (file) =>
+          !file.type.startsWith('image/') &&
+          !file.type.startsWith('audio/') &&
+          !file.type.startsWith('video/')
       )
     ) {
       setUploadError('Only image, audio, and video files are allowed.');
@@ -469,11 +495,20 @@ function UploadFieldBody({
               ) : (
                 <div className='bg-muted flex size-12 items-center justify-center rounded-md border'>
                   {isAudioFile(file) ? (
-                    <AudioLines className='size-5' aria-hidden='true' />
+                    <AudioLines
+                      className='size-5'
+                      aria-hidden='true'
+                    />
                   ) : isVideoFile(file) ? (
-                    <Video className='size-5' aria-hidden='true' />
+                    <Video
+                      className='size-5'
+                      aria-hidden='true'
+                    />
                   ) : (
-                    <FileIcon className='size-5' aria-hidden='true' />
+                    <FileIcon
+                      className='size-5'
+                      aria-hidden='true'
+                    />
                   )}
                 </div>
               )}
@@ -576,7 +611,16 @@ export function FileUploadField<
                 describedBy={describedBy || undefined}
                 multiple={multiple}
                 maxFiles={Math.max(maxFiles, 1)}
-                accept={accept ?? (mode === 'image' ? 'image/*' : mode === 'audio' ? 'audio/*' : mode === 'media' ? 'image/*,audio/*,video/*' : '*/*')}
+                accept={
+                  accept ??
+                  (mode === 'image'
+                    ? 'image/*'
+                    : mode === 'audio'
+                      ? 'audio/*'
+                      : mode === 'media'
+                        ? 'image/*,audio/*,video/*'
+                        : '*/*')
+                }
                 emptyText={
                   emptyText ??
                   (mode === 'image'

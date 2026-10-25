@@ -1,0 +1,102 @@
+'use client';
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { Button } from '../ui/button';
+import { deleteCategory } from '@/app/(dashboard)/dashboard/categories/actions';
+import { useState, useTransition } from 'react';
+import { toast } from '../ui/toast';
+
+type DeleteCategoryProps = {
+  categoryId: string;
+  categoryName: string;
+};
+
+const DeleteCategoryButton = ({
+  categoryId,
+  categoryName,
+}: DeleteCategoryProps) => {
+  const [open, setOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  const handleDelete = () => {
+    startTransition(async () => {
+      try {
+        const result = await deleteCategory(categoryId);
+
+        if (!result.success) {
+          toast.add({
+            type: 'error',
+            title: result.error,
+          });
+          return;
+        }
+
+        toast.add({
+          type: 'success',
+          title: result.message,
+        });
+
+        setOpen(false);
+      } catch {
+        toast.add({
+          type: 'error',
+          title: 'Unable to delete category. Please try again.',
+        });
+      }
+    });
+  };
+
+  return (
+    <AlertDialog
+      open={open}
+      onOpenChange={(nextOpen) => {
+        if (!isPending) setOpen(nextOpen);
+      }}
+    >
+      <AlertDialogTrigger
+        render={
+          <Button
+            variant='destructive'
+            disabled={isPending}
+          />
+        }
+      >
+        Delete
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete {categoryName}?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to delete the category &quot;{categoryName}
+            &quot;? This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            variant='destructive'
+            onClick={(event) => {
+              event.preventDefault();
+              handleDelete();
+            }}
+            disabled={isPending}
+          >
+            {isPending ? 'Deleting...' : 'Delete Category'}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
+
+export default DeleteCategoryButton;

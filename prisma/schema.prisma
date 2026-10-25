@@ -84,7 +84,7 @@ model Verification {
 model Category {
   id          String @id @default(uuid())
   name        String
-  description String
+  description String?
   slug        String @unique
   sortOrder   Int    @default(0)
 
