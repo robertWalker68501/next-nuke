@@ -14,6 +14,7 @@ import {
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
 import DeleteCategoryButton from '@/components/categories/DeleteCategoryButton';
+import CategoryMoveButtons from '@/components/categories/CategoryMoveButtons';
 
 const AuthorizedCategoriesList = async () => {
   const session = await auth.api.getSession({
@@ -45,7 +46,7 @@ const AuthorizedCategoriesList = async () => {
         <p>No categories have been created yet</p>
       ) : (
         <div className='flex flex-col gap-4'>
-          {categories.map((category) => (
+          {categories.map((category, index) => (
             <Item
               key={category.id}
               variant='outline'
@@ -55,6 +56,11 @@ const AuthorizedCategoriesList = async () => {
                 <ItemDescription>{category.description}</ItemDescription>
               </ItemContent>
               <ItemActions>
+                <CategoryMoveButtons
+                  categoryId={category.id}
+                  isFirst={index === 0}
+                  isLast={index === categories.length - 1}
+                />
                 <Link
                   href={`/dashboard/categories/${category.id}/edit`}
                   className={buttonVariants({})}
