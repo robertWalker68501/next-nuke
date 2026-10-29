@@ -26,7 +26,7 @@ export const createCategory = async ({
   if (!validatedFields.success) {
     return {
       success: false,
-      error: 'Invalid category information',
+      error: 'Invalid category information.',
     };
   }
 

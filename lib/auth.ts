@@ -6,7 +6,7 @@ import { nextCookies } from 'better-auth/next-js';
 import { sendVerificationEmail } from './send-verification-email';
 
 export const auth = betterAuth({
-  appName: 'SonicCircle',
+  appName: 'NextNuke',
 
   database: prismaAdapter(prisma, {
     provider: 'postgresql',

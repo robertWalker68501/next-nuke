@@ -118,10 +118,13 @@ function RequiredAsterisk({
 
   return (
     <>
-      <span className="ml-1 text-destructive" aria-hidden="true">
+      <span
+        className='text-destructive ml-1'
+        aria-hidden='true'
+      >
         *
       </span>
-      <span className="sr-only">Required</span>
+      <span className='sr-only'>Required</span>
     </>
   );
 }
@@ -163,7 +166,7 @@ export function FormFieldControl<
               data-invalid={fieldState.invalid || undefined}
               className={cn('grid gap-2', className)}
             >
-              <div className="flex items-start gap-3">
+              <div className='flex items-start gap-3'>
                 <Checkbox
                   id={fieldId}
                   name={field.name}
@@ -178,10 +181,10 @@ export function FormFieldControl<
                   ref={field.ref}
                 />
 
-                <FieldContent className="gap-1">
+                <FieldContent className='gap-1'>
                   <FieldLabel
                     htmlFor={fieldId}
-                    className="cursor-pointer leading-snug"
+                    className='cursor-pointer leading-snug'
                   >
                     {props.checkboxLabel ?? label}
                     <RequiredAsterisk
@@ -196,7 +199,10 @@ export function FormFieldControl<
                     </FieldDescription>
                   ) : null}
 
-                  <FieldError id={errorId} errors={[fieldState.error]} />
+                  <FieldError
+                    id={errorId}
+                    errors={[fieldState.error]}
+                  />
                 </FieldContent>
               </div>
             </Field>
@@ -233,7 +239,13 @@ export function FormFieldControl<
                   >
                     <SelectValue
                       placeholder={props.placeholder ?? 'Select an option'}
-                    />
+                    >
+                      {
+                        props.options.find(
+                          (option) => option.value === field.value
+                        )?.label
+                      }
+                    </SelectValue>
                   </SelectTrigger>
 
                   <SelectContent>
@@ -268,7 +280,7 @@ export function FormFieldControl<
                       props.resize !== 'horizontal' &&
                       props.resize !== 'both' &&
                       'resize-y',
-                    props.textareaClassName,
+                    props.textareaClassName
                   )}
                   placeholder={props.placeholder}
                   disabled={disabled}
@@ -303,7 +315,10 @@ export function FormFieldControl<
                 </FieldDescription>
               ) : null}
 
-              <FieldError id={errorId} errors={[fieldState.error]} />
+              <FieldError
+                id={errorId}
+                errors={[fieldState.error]}
+              />
             </FieldContent>
           </Field>
         );

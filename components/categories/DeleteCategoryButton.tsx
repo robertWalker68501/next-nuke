@@ -34,6 +34,8 @@ const DeleteCategoryButton = ({
         const result = await deleteCategory(categoryId);
 
         if (!result.success) {
+          setOpen(false);
+
           toast.add({
             type: 'error',
             title: result.error,
@@ -48,6 +50,8 @@ const DeleteCategoryButton = ({
 
         setOpen(false);
       } catch {
+        setOpen(false);
+
         toast.add({
           type: 'error',
           title: 'Unable to delete category. Please try again.',

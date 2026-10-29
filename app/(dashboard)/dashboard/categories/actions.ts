@@ -34,8 +34,19 @@ export const deleteCategory = async (id: string) => {
     };
   }
 
-  // TODO: Prevent deletion when forums are associated with this category.
-  // Implement when the Forum model and its relationship are introduced.
+  // Prevent deletion when forums are associated with a category.
+  const forumCount = await prisma.forum.count({
+    where: {
+      categoryId: validatedId.data,
+    },
+  });
+
+  if (forumCount > 0) {
+    return {
+      success: false,
+      error: 'Cannot delete a category that contains forums.',
+    };
+  }
 
   // Delete the category
   try {
@@ -59,6 +70,16 @@ export const deleteCategory = async (id: string) => {
       return {
         success: false,
         error: 'Category no longer exists.',
+      };
+    }
+
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2003'
+    ) {
+      return {
+        success: false,
+        error: 'Cannot delete a category that contains forums.',
       };
     }
 
